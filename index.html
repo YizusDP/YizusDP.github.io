@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jesús Alejandro · Dev Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070810;
+    --surface: #0f1120;
+    --surface2: #171a2e;
+    --accent: #5dffb6;
+    --accent2: #7c6fff;
+    --text: #e8eaf6;
+    --muted: #6b7099;
+    --border: rgba(93,255,182,0.12);
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    background: rgba(7,8,16,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--muted); }
+
+  nav ul {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  nav a:hover { color: var(--accent); }
+  nav a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(93,255,182,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(93,255,182,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,111,255,0.18) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(93,255,182,0.1) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.35s;
+  }
+
+  h1 .name-accent { color: var(--accent); }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .hero-sub .highlight {
+    color: var(--accent2);
+    background: rgba(124,111,255,0.12);
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.65s;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(93,255,182,0.3);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 6rem 4rem;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 550px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.97rem;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(93,255,182,0.4);
+    transform: translateY(-4px);
+  }
+
+  .stat-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: var(--mono);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--accent);
+    transition: height 0.3s;
+    border-radius: 0 0 3px 0;
+  }
+
+  .skill-card:hover::before { height: 100%; }
+  .skill-card:hover { border-color: rgba(93,255,182,0.25); transform: translateX(4px); }
+
+  .skill-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .skill-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+
+  .skill-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: var(--mono);
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    background: rgba(93,255,182,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(93,255,182,0.15);
+    letter-spacing: 0.04em;
+  }
+
+  .tag.purple {
+    background: rgba(124,111,255,0.1);
+    color: var(--accent2);
+    border-color: rgba(124,111,255,0.2);
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(93,255,182,0.04), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover { border-color: rgba(93,255,182,0.3); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .project-card:hover::after { opacity: 1; }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .project-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .project-link {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .project-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .project-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 0.25rem;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: var(--mono);
+    flex: 1;
+  }
+
+  .project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .lang-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .lang-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+  }
+
+  .personal-badge {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(124,111,255,0.12);
+    color: var(--accent2);
+    border-radius: 4px;
+    border: 1px solid rgba(124,111,255,0.2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── CONTACT ── */
+  #contact { text-align: center; }
+
+  .contact-inner {
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .contact-email {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    color: var(--accent);
+    text-decoration: none;
+    display: block;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px dashed rgba(93,255,182,0.3);
+    border-radius: 10px;
+    transition: all 0.25s;
+    letter-spacing: 0.02em;
+  }
+
+  .contact-email:hover {
+    background: rgba(93,255,182,0.05);
+    border-style: solid;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    transition: all 0.25s;
+  }
+
+  .social-btn:hover { color: var(--accent); border-color: rgba(93,255,182,0.35); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .footer-accent { color: var(--accent); }
+
+  /* ── CURSOR LINE ── */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { gap: 1.25rem; }
+    section { padding: 4rem 1.5rem; }
+    #hero { padding: 0 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">YizusDP<span>.dev</span></div>
+  <ul>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Proyectos</a></li>
+    <li><a href="#contenido">TecnoYizus</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Disponible para oportunidades</div>
+    <h1>
+      Jesús<br>
+      <span class="name-accent">Alejandro</span><br>
+      Domínguez
+    </h1>
+    <p class="hero-sub">
+      Estudiante de Ingeniería · Desarrollador de Software<br>
+      Apasionado por la <span class="highlight">Inteligencia Artificial</span>,<br>
+      los <span class="highlight">gráficos por computadora</span> y la resolución de problemas complejos.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">→ Ver proyectos</a>
+      <a href="#contact" class="btn btn-outline">Contactar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">Sobre mí</div>
+      <h2>Construyendo desde<br>la <span style="color:var(--accent)">curiosidad</span></h2>
+      <br>
+      <p>Soy <strong>Jesús Alejandro Domínguez Palacios</strong>, estudiante de Ingeniería en Ciencias de la Computación. Me motiva entender cómo funcionan las cosas desde adentro y construir soluciones que importen.</p>
+      <p>He trabajado en proyectos que van desde <strong>algoritmos de estructuras de datos</strong> hasta <strong>motores gráficos en C/C++</strong>, pasando por <strong>inteligencia artificial</strong> y computación cuántica.</p>
+      <p>Busco mi primera experiencia profesional donde pueda aportar energía, ganas de aprender y código limpio. 🚀</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Proyectos en GitHub</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Lenguajes dominados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Cafés programando</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Comprometido a crecer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label reveal">Habilidades técnicas</div>
+  <h2 class="reveal">Mi <span style="color:var(--accent)">stack</span></h2>
+  <p class="section-desc reveal">Lenguajes, herramientas y conceptos con los que trabajo.</p>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-name">C / C++</div>
+      <div class="skill-desc">Programación de sistemas, gráficos por computadora y proyectos de bajo nivel.</div>
+      <div class="skill-tags">
+        <span class="tag">OpenGL</span>
+        <span class="tag">Memoria</span>
+        <span class="tag">Punteros</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-desc">Inteligencia artificial, machine learning y scripting de automatización.</div>
+      <div class="skill-tags">
+        <span class="tag">NumPy</span>
+        <span class="tag">ML</span>
+        <span class="tag">IA</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">HTML / CSS</div>
+      <div class="skill-desc">Desarrollo web frontend, interfaces y visualización de datos en browser.</div>
+      <div class="skill-tags">
+        <span class="tag">Frontend</span>
+        <span class="tag">Responsive</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📊</div>
+      <div class="skill-name">Jupyter / Data</div>
+      <div class="skill-desc">Análisis de datos, notebooks interactivos y exploración científica.</div>
+      <div class="skill-tags">
+        <span class="tag purple">Jupyter</span>
+        <span class="tag purple">Pandas</span>
+        <span class="tag purple">Qiskit</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📱</div>
+      <div class="skill-name">Flutter / Dart</div>
+      <div class="skill-desc">Desarrollo mobile multiplataforma. Clean Architecture, Provider, Hive y background services.</div>
+      <div class="skill-tags">
+        <span class="tag">Flutter</span>
+        <span class="tag">Dart</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">Provider</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🔀</div>
+      <div class="skill-name">Git & GitHub</div>
+      <div class="skill-desc">Control de versiones, trabajo colaborativo y gestión de repositorios.</div>
+      <div class="skill-tags">
+        <span class="tag">Git</span>
+        <span class="tag">Pull Requests</span>
+        <span class="tag">Forks</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">Blender — 3D</div>
+      <div class="skill-desc">Modelado y renderizado 3D. Creación de assets, escenas y personajes aplicados a proyectos de videojuegos.</div>
+      <div class="skill-tags">
+        <span class="tag">Blender</span>
+        <span class="tag">Modelado 3D</span>
+        <span class="tag">Render</span>
+        <span class="tag purple">Game Assets</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚛️</div>
+      <div class="skill-name">Computación Cuántica</div>
+      <div class="skill-desc">Fundamentos de algoritmos cuánticos y circuitos cuánticos básicos.</div>
+      <div class="skill-tags">
+        <span class="tag purple">Qiskit</span>
+        <span class="tag purple">Quantum</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label reveal">Trabajo</div>
+  <h2 class="reveal">Proyectos<br><span style="color:var(--accent)">destacados</span></h2>
+  <p class="section-desc reveal">Proyectos académicos y personales que demuestran mis capacidades técnicas.</p>
+
+  <!-- ★ PROYECTO ESTRELLA: XOOKIL ★ -->
+  <div class="reveal" style="margin-bottom:1.5rem;">
+    <div class="project-card" style="border-color:rgba(93,255,182,0.35); background: linear-gradient(135deg, rgba(93,255,182,0.06) 0%, var(--bg) 60%); grid-column: 1 / -1; position:relative; overflow:visible;">
+      <!-- Badge destacado -->
+      <div style="position:absolute; top:-12px; left:2rem; background:var(--accent); color:var(--bg); font-family:var(--mono); font-size:0.68rem; font-weight:700; padding:0.2rem 0.75rem; border-radius:20px; letter-spacing:0.1em; text-transform:uppercase;">
+        ★ Proyecto Principal
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; padding-top:0.75rem;">
+        <!-- Lado izquierdo -->
+        <div>
+          <div class="project-header" style="margin-bottom:1rem;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div class="project-icon" style="background:rgba(93,255,182,0.1); border-color:rgba(93,255,182,0.3); font-size:1.6rem; width:52px; height:52px;">🐾</div>
+              <div>
+                <div style="font-family:var(--mono); font-size:0.7rem; color:var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:2px;">App Mobile Personal</div>
+                <div class="project-name" style="font-size:1.5rem; letter-spacing:-0.02em;">Xookil</div>
+              </div>
+            </div>
+            <a href="https://github.com/YizusDP/Proyecto_o" target="_blank" class="project-link" title="GitHub" style="width:36px;height:36px;">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+          <p class="project-desc" style="font-size:0.9rem; margin-bottom:1.25rem;">
+            App móvil de productividad y organización personal desarrollada íntegramente en Flutter. Diseñada con Clean Architecture y gestión de estado con Provider, integra múltiples módulos para ayudar a estudiantes a gestionar su tiempo, tareas y hábitos desde un solo lugar.
+          </p>
+          <div class="skill-tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">Dart</span>
+            <span class="tag">Provider</span>
+            <span class="tag">Hive</span>
+            <span class="tag">Clean Architecture</span>
+            <span class="tag">Background Services</span>
+            <span class="tag purple">Mobile</span>
+          </div>
+          <div class="project-footer" style="margin-top:1.25rem;">
+            <span class="lang-label"><span class="lang-dot" style="background:#54C5F8"></span>Flutter / Dart</span>
+            <span class="personal-badge" style="font-size:0.7rem;">Proyecto personal</span>
+          </div>
+        </div>
+        <!-- Lado derecho: features -->
+        <div>
+          <div style="font-family:var(--mono); font-size:0.72rem; color:var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:1rem;">Funcionalidades</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">✅</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Gestión de tareas</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Prioridad, fecha límite, dificultad</div>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">🍅</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Temporizador Pomodoro</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Background service + notificaciones</div>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">🗓️</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Horario inteligente</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Bloques: clases, sueño, ejercicio</div>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">📊</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Estadísticas</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Racha, sesiones, tiempo de enfoque</div>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">📝</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Notas tipo post-it</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Colores + recordatorios con fecha</div>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem;">
+              <div style="font-size:1rem; margin-bottom:2px;">🐾</div>
+              <div style="font-size:0.78rem; font-weight:700; color:var(--text);">Tlakua — mascota IA</div>
+              <div style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">Tips contextuales en tiempo real</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de otros proyectos -->
+  <div class="projects-grid">
+
+    <!-- Proyecto Gráficos -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">🎮</div>
+        <div class="project-links">
+          <a href="https://github.com/YizusDP/ProyectoCompuGraficaLab" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Computación Gráfica</div>
+      <div class="project-desc">Motor gráfico en C/C++. Renderizado, transformaciones geométricas y manejo de buffers en tiempo real usando Visual Studio.</div>
+      <div class="skill-tags">
+        <span class="tag">C</span>
+        <span class="tag">C++</span>
+        <span class="tag">OpenGL</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label"><span class="lang-dot" style="background:#555753"></span>C / C++</span>
+      </div>
+    </div>
+
+    <!-- Proyecto IA -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">🤖</div>
+        <div class="project-links">
+          <a href="https://github.com/YizusDP/Proyecto1_IA" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Proyecto — Inteligencia Artificial</div>
+      <div class="project-desc">Algoritmos de IA en Python: búsqueda, optimización y modelos de machine learning aplicados a problemas del mundo real.</div>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">ML</span>
+        <span class="tag">Algoritmos</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+      </div>
+    </div>
+
+    <!-- Proyecto ED -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">🌳</div>
+        <div class="project-links">
+          <a href="https://github.com/YizusDP/Proyecto_ED" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Estructuras de Datos</div>
+      <div class="project-desc">Aplicación web que implementa y visualiza estructuras de datos: árboles, listas enlazadas, grafos y algoritmos de búsqueda.</div>
+      <div class="skill-tags">
+        <span class="tag">HTML</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Algoritmos</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label"><span class="lang-dot" style="background:#e34c26"></span>HTML / JS</span>
+      </div>
+    </div>
+
+    <!-- Quantum -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">⚛️</div>
+        <div class="project-links">
+          <a href="https://github.com/YizusDP/LaboratorioCC2026-2" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Lab Computación Cuántica</div>
+      <div class="project-desc">Circuitos cuánticos, algoritmos de superposición y entrelazamiento. Prácticas de laboratorio con Qiskit en Jupyter Notebook.</div>
+      <div class="skill-tags">
+        <span class="tag purple">Jupyter</span>
+        <span class="tag purple">Qiskit</span>
+        <span class="tag purple">Quantum</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label"><span class="lang-dot" style="background:#DA5B0B"></span>Jupyter Notebook</span>
+      </div>
+    </div>
+
+    <!-- Coyotl - Videojuego UE5 -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">🐺</div>
+        <div class="project-links">
+          <a href="https://github.com/fausrdz/Coyotl" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Coyotl — Videojuego 3D</div>
+      <div class="project-desc">Endless Runner 3D desarrollado en Unreal Engine 5. Migrado desde Unity 2D para mejorar el aspecto visual. Rol: <strong style="color:var(--accent)">Manager del equipo</strong> — coordinación, planificación y entrega del proyecto.</div>
+      <div class="skill-tags">
+        <span class="tag">Unreal Engine 5</span>
+        <span class="tag">Blueprints</span>
+        <span class="tag">3D</span>
+        <span class="tag">Unity</span>
+        <span class="tag purple">Team Lead</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label">🎮 Unreal Engine 5</span>
+        <span class="personal-badge">Colaboración</span>
+      </div>
+    </div>
+
+    <!-- LUMINA - Videojuego Unity -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">💡</div>
+        <div class="project-links">
+          <a href="https://github.com/JUPiTERdia117/LUMINA" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">LUMINA — Videojuego Unity</div>
+      <div class="project-desc">Videojuego desarrollado en Unity para la materia SODVI. Triple rol: <strong style="color:var(--accent)">Programador</strong>, <strong style="color:var(--accent)">Compositor</strong> y <strong style="color:var(--accent)">Sound Designer</strong> — diseño de mecánicas, música original y efectos de sonido.</div>
+      <div class="skill-tags">
+        <span class="tag">Unity</span>
+        <span class="tag">C#</span>
+        <span class="tag purple">Música</span>
+        <span class="tag purple">Sound Design</span>
+        <span class="tag purple">Colaboración</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label">🎮 Unity</span>
+        <span class="personal-badge">Colaboración</span>
+      </div>
+    </div>
+
+    <!-- Admin Proyectos -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-icon">📋</div>
+        <div class="project-links">
+          <a href="https://github.com/YizusDP/AdminProy3_Ing" target="_blank" class="project-link" title="GitHub">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="project-name">Administración de Proyectos</div>
+      <div class="project-desc">Proyecto en equipo con metodologías ágiles (Scrum), planificación de sprints y gestión de un producto de software completo.</div>
+      <div class="skill-tags">
+        <span class="tag">Agile</span>
+        <span class="tag">Scrum</span>
+        <span class="tag">C</span>
+        <span class="tag">Teamwork</span>
+      </div>
+      <div class="project-footer">
+        <span class="lang-label"><span class="lang-dot" style="background:#555753"></span>C</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TECNOYIZUS -->
+<section id="contenido" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-label reveal">Más sobre mí</div>
+  <h2 class="reveal">TecnoYizus<br><span style="color:var(--accent)">Divulgación</span> tech</h2>
+  <p class="section-desc reveal">Además de programar, creo contenido digital para hacer la tecnología accesible a todos.</p>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; max-width:860px;">
+
+    <div class="stat-card reveal" style="grid-column: 1 / -1; display:flex; align-items:center; gap:2rem; padding:2rem;">
+      <div style="font-size:3.5rem; flex-shrink:0;">📱</div>
+      <div>
+        <div style="font-family:var(--mono); font-size:0.72rem; color:var(--accent); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.4rem;">Creador de Contenido Digital</div>
+        <div style="font-size:1.2rem; font-weight:800; margin-bottom:0.5rem;">TecnoYizus</div>
+        <p style="font-size:0.85rem; color:var(--muted); font-family:var(--mono); line-height:1.7;">Canal de divulgación tecnológica donde convierto temas complejos de tecnología, programación y ciencias de la computación en contenido digerible y entretenido para el público general.</p>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎬</div>
+      <div class="skill-name">Producción de Contenido</div>
+      <div class="skill-desc">Creación, guión, grabación y edición de videos de divulgación tecnológica en formato vertical para redes sociales.</div>
+      <div class="skill-tags">
+        <span class="tag">TikTok</span>
+        <span class="tag">9:16</span>
+        <span class="tag purple">Edición de video</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎙️</div>
+      <div class="skill-name">Comunicación Técnica</div>
+      <div class="skill-desc">Capacidad de traducir conceptos técnicos complejos (IA, computación cuántica, dev) en lenguaje accesible.</div>
+      <div class="skill-tags">
+        <span class="tag purple">Divulgación</span>
+        <span class="tag purple">Guión</span>
+        <span class="tag purple">Storytelling</span>
+      </div>
+    </div>
+
+    <div class="stat-card reveal" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+      <div style="font-size:1.8rem; margin-bottom:0.5rem;">🎵</div>
+      <div class="stat-label" style="margin-bottom:0.25rem;">Producción Musical</div>
+      <div style="font-size:0.78rem; color:var(--muted); font-family:var(--mono); line-height:1.6;">Composición de música original y diseño de efectos de sonido para videojuegos y proyectos multimedia.</div>
+    </div>
+
+    <div class="stat-card reveal" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+      <a href="https://www.tiktok.com/@tecnoyizus" target="_blank" style="text-decoration:none; color:inherit; width:100%;">
+        <div style="font-size:1.8rem; margin-bottom:0.5rem;">🔗</div>
+        <div class="stat-num" style="font-size:1.2rem;">@tecnoyizus</div>
+        <div class="stat-label" style="margin-top:0.35rem;">TikTok · Ver canal →</div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label reveal" style="justify-content:center">Contacto</div>
+    <h2 class="reveal">¿Hablamos?<span class="cursor"></span></h2>
+    <p class="section-desc reveal" style="margin: 1rem auto 0; text-align:center">
+      Estoy buscando mi primera oportunidad profesional. Si tu equipo necesita a alguien con ganas de aprender y crecer, escríbeme.
+    </p>
+    <a href="mailto:adp3993@gmail.com" class="contact-email reveal">adp3993@gmail.com</a>
+    <div class="social-links reveal">
+      <a href="https://github.com/YizusDP" target="_blank" class="social-btn">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://www.tiktok.com/@tecnoyizus" target="_blank" class="social-btn">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+        TecnoYizus
+      </a>
+      <!-- Agrega tu LinkedIn cuando lo tengas -->
+      <a href="https://linkedin.com/in/tu-perfil" target="_blank" class="social-btn">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.89 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.23 0z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span class="footer-accent">Jesús Alejandro Domínguez Palacios</span></p>
+  <p>Hecho con 💚 y mucho café · YizusDP</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
