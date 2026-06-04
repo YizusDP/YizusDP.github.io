@@ -737,15 +737,79 @@
   .reveal.visible { opacity: 1; transform: none; }
 
   /* RESPONSIVE */
+  /* ── TABLET ── */
   @media (max-width: 900px) {
-    nav { padding: 1rem 1.5rem; }
-    nav ul { gap: 1.5rem; }
     section { padding: 4rem 1.5rem; }
-    #hero { padding: 5rem 1.5rem 0; }
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    #hero { padding: 5rem 1.5rem 2rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
     .project-featured { grid-template-columns: 1fr; }
     .creator-grid { grid-template-columns: 1fr; }
     footer { padding: 1.5rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+    .skills-secondary { flex-direction: column; }
+    .skill-pill-secondary { min-width: unset; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+
+    /* NAV — logo only, links scroll horizontal */
+    nav {
+      padding: 0.9rem 1.25rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    nav ul {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      width: 100%;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    nav ul::-webkit-scrollbar { display: none; }
+    nav a { font-size: 0.65rem; white-space: nowrap; }
+
+    /* HERO */
+    #hero { padding: 7rem 1.25rem 2rem; min-height: auto; }
+    h1 { font-size: clamp(2.4rem, 12vw, 4rem); line-height: 0.95; }
+    .hero-sub { font-size: 0.78rem; }
+    .hero-pills { gap: 0.35rem; }
+    .pill { font-size: 0.6rem; padding: 0.25rem 0.6rem; }
+    .hero-cta { flex-direction: column; }
+    .btn { justify-content: center; text-align: center; }
+
+    /* ABOUT — photo smaller, stacks */
+    .about-text { grid-template-columns: 1fr !important; }
+    .about-text > div:first-child img { width: 120px !important; border-radius: 10px; }
+    .about-text > div:first-child { display: flex; justify-content: center; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+
+    /* SECTIONS */
+    section { padding: 3rem 1.25rem; }
+    h2 { font-size: clamp(1.7rem, 8vw, 2.5rem); }
+    .section-desc { font-size: 0.82rem; margin-bottom: 2rem; }
+
+    /* SKILLS */
+    .skills-primary { grid-template-columns: 1fr; }
+    .skill-block { padding: 1.25rem; }
+    .features-grid { grid-template-columns: 1fr; }
+
+    /* PROJECTS */
+    .project-featured { padding: 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card { padding: 1.25rem; }
+
+    /* CONTACT */
+    .contact-email { font-size: 0.82rem; padding: 1rem; }
+    .social-links { flex-direction: column; align-items: center; }
+    .social-btn { width: 100%; justify-content: center; }
+
+    /* CREATOR */
+    .creator-main { padding: 1.25rem; }
+
+    /* FOOTER */
+    footer { padding: 1.25rem; flex-direction: column; gap: 0.4rem; text-align: center; }
   }
 </style>
 </head>
