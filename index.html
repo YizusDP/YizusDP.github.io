@@ -46,7 +46,7 @@
     </div>
     <div class="hero__matrix" aria-hidden="true">
       <canvas id="leds"></canvas>
-      <p class="hero__hint">Pasa el cursor</p>
+      <p class="hero__hint">Pasa el cursor o haz clic</p>
     </div>
   </section>
 
@@ -81,9 +81,15 @@
 
     <article class="work reveal">
       <div class="work__media work__media--panel">
-        <svg class="buttons-grid" viewBox="0 0 360 200" role="img" aria-label="Ilustración del tablero de 18 botones iluminados">
+        <p class="game__prompt" id="game-prompt">Toca el botón encendido</p>
+        <svg class="buttons-grid" viewBox="0 0 360 200" role="img" aria-label="Mini juego de reflejos con 18 botones: toca el que se enciende">
           <g id="btns"></g>
         </svg>
+        <dl class="game__hud" aria-live="polite">
+          <div><dt>Aciertos</dt><dd id="game-hits">0</dd></div>
+          <div><dt>Reacción</dt><dd id="game-rt">–</dd></div>
+          <div><dt>Mejor</dt><dd id="game-best">–</dd></div>
+        </dl>
       </div>
       <div class="work__body">
         <p class="meta">Algo Studio · Liverpool Perisur · jun – jul 2026</p>

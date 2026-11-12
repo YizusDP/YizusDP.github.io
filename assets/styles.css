@@ -183,12 +183,29 @@ ul { margin: 0; padding: 0; }
 .work:hover .work__media--phones img:first-child { transform: rotate(-5deg) translate(-6px, 0); }
 .work:hover .work__media--phones img:last-child { transform: rotate(5deg) translate(6px, -8px); }
 
-.work__media--panel { background: var(--night); display: grid; place-items: center; padding: 8%; }
-.buttons-grid { width: 100%; height: auto; }
-.buttons-grid .ring { fill: none; stroke: #2c3140; stroke-width: 3; transition: stroke .35s, filter .35s; }
-.buttons-grid .cap { fill: #1c2029; }
-.buttons-grid .on .ring { stroke: var(--led); filter: drop-shadow(0 0 6px var(--led)); }
+.work__media--panel {
+  background: var(--night); color: #8d93a6;
+  display: flex; flex-direction: column; justify-content: center; gap: 1rem;
+  padding: 6% 8%;
+}
+.game__prompt { margin: 0; font-size: .9rem; text-align: center; transition: color .3s; }
+.game__prompt.is-good { color: #7dffb0; }
+.game__prompt.is-bad { color: #ff7a85; }
+.buttons-grid { width: 100%; height: auto; touch-action: manipulation; }
+.buttons-grid g { cursor: pointer; }
+.buttons-grid .ring { fill: none; stroke: #2c3140; stroke-width: 3; transition: stroke .25s, filter .25s; }
+.buttons-grid .cap { fill: #1c2029; transform-box: fill-box; transform-origin: center; transition: transform .12s, fill .25s; }
+.buttons-grid g:hover .ring { stroke: #454b5e; }
+.buttons-grid .on .ring { stroke: var(--led); filter: drop-shadow(0 0 7px var(--led)); }
 .buttons-grid .on .cap { fill: #3a2c14; }
+.buttons-grid .hit .ring { stroke: #7dffb0; filter: drop-shadow(0 0 9px #7dffb0); }
+.buttons-grid .hit .cap { fill: #1d3a2a; transform: scale(.86); }
+.buttons-grid .miss .ring { stroke: #ff5d6c; filter: drop-shadow(0 0 7px #ff5d6c); }
+.buttons-grid .miss .cap { transform: scale(.9); }
+.game__hud { display: flex; justify-content: center; gap: 2rem; margin: 0; }
+.game__hud div { text-align: center; }
+.game__hud dt { font-size: .75rem; }
+.game__hud dd { margin: 0; color: #e8eaf1; font-family: var(--display); font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
 
 .work__media--app { background: #e7ecff; display: grid; place-items: center; }
 .work__media--app img { width: 46%; border-radius: 28px; box-shadow: 0 24px 40px -20px rgba(47, 76, 245, .55); transition: transform .6s var(--ease); }
