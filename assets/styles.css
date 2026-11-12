@@ -246,6 +246,7 @@ ul { margin: 0; padding: 0; }
 }
 .card__img { object-fit: cover; transition: transform .6s var(--ease); }
 .card:hover .card__img { transform: scale(1.02); }
+.card__img--logo { object-fit: contain; background: #000; }
 .card__icon {
   padding: 13% 30%; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
   transition: stroke .3s, background .3s;
