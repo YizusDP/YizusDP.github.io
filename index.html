@@ -77,13 +77,58 @@
     </div>
   </section>
 
-  <!-- EN NUMEROS -->
-  <section class="facts" aria-label="En números">
-    <ul class="facts__list">
-      <li><span class="facts__num" data-count="2">2</span><span class="facts__label">kioscos táctiles para un evento en el WTC</span></li>
-      <li><span class="facts__num" data-count="3">3</span><span class="facts__label">instalaciones con mantenimiento técnico en Liverpool</span></li>
-      <li><span class="facts__num" data-count="30" data-suffix="+">30+</span><span class="facts__label">herramientas de editor en C# en el corto Amistad</span></li>
-      <li><span class="facts__num" data-count="4">4</span><span class="facts__label">shaders míos portados a WebGL en este sitio</span></li>
+  <!-- QUE HAGO -->
+  <section class="areas" aria-labelledby="areas-title">
+    <h2 class="visually-hidden" id="areas-title">Lo que hago</h2>
+    <ul class="areas__list">
+      <li>
+        <a class="area" href="#voices">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="17" rx="2"/><path d="M10 22h4M12 19v3"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span class="area__title">Experiencias interactivas</span>
+          <span class="area__desc">Kioscos táctiles en Unity para eventos</span>
+          <span class="area__stack">Unity · C# · JSON</span>
+        </a>
+      </li>
+      <li>
+        <a class="area" href="#vfx">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5 5 10a5 5 0 0 1-10 0c0-3 2-4 2-7 1.5 1 3 2 3 4 1-1 1-4 0-7z"/></svg>
+          <span class="area__title">VFX y shaders</span>
+          <span class="area__desc">Corto en tiempo real con shaders propios</span>
+          <span class="area__stack">Shader Graph · HLSL · VFX Graph</span>
+        </a>
+      </li>
+      <li>
+        <a class="area" href="#xookil">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+          <span class="area__title">Apps móviles</span>
+          <span class="area__desc">Xookil, app de productividad desde cero</span>
+          <span class="area__stack">Flutter · Dart · Clean Architecture</span>
+        </a>
+      </li>
+      <li>
+        <a class="area" href="#inicio">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M9 13l-2 2 2 2M15 13l2 2-2 2"/></svg>
+          <span class="area__title">Frontend web</span>
+          <span class="area__desc">Este sitio: animaciones y shaders en WebGL</span>
+          <span class="area__stack">HTML · CSS · JavaScript · GLSL</span>
+        </a>
+      </li>
+      <li>
+        <a class="area" href="#liverpool">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>
+          <span class="area__title">Hardware</span>
+          <span class="area__desc">Microcontroladores, sensores y LEDs con Unity</span>
+          <span class="area__stack">Arduino · ESP32 · Serial · NeoPixel</span>
+        </a>
+      </li>
+      <li>
+        <a class="area" href="#robot">
+          <svg class="area__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M9 16h6"/><circle cx="12" cy="3" r="1"/></svg>
+          <span class="area__title">Robótica e IA</span>
+          <span class="area__desc">Robot que ve, escucha y decide solo</span>
+          <span class="area__stack">ROS2 · YOLO · Whisper · Ollama</span>
+        </a>
+      </li>
     </ul>
   </section>
 
@@ -92,7 +137,7 @@
     <h2 class="section__title" id="trabajo-title">Trabajo</h2>
     <p class="section__intro">Proyectos para clientes y producto propio, del más reciente al anterior.</p>
 
-    <article class="work reveal">
+    <article class="work reveal" id="voices">
       <div class="work__media work__media--phones">
         <img src="assets/img/voices-quiz.jpg" alt="Pantalla de referencia del quiz de Voices: elige tu caso" width="463" height="828" loading="lazy">
         <img src="assets/img/voices-selector.jpg" alt="Pantalla de referencia del selector de soluciones de Voices" width="483" height="859" loading="lazy">
@@ -106,7 +151,7 @@
       </div>
     </article>
 
-    <article class="work reveal">
+    <article class="work reveal" id="liverpool">
       <div class="work__media work__media--panel">
         <p class="game__prompt" id="game-prompt">Toca el botón encendido</p>
         <svg class="buttons-grid" viewBox="0 0 360 200" role="img" aria-label="Mini juego de reflejos con 18 botones: toca el que se enciende">
@@ -127,7 +172,7 @@
       </div>
     </article>
 
-    <article class="work reveal">
+    <article class="work reveal" id="xookil">
       <div class="work__media work__media--app">
         <img src="assets/img/tlakua.jpg" alt="Tlakua, la mascota de Xookil" width="300" height="298" loading="lazy">
       </div>
@@ -176,7 +221,7 @@
     <p class="section__intro">Proyectos de la carrera y de SODVI, la sociedad de videojuegos de la FI UNAM.</p>
 
     <ul class="grid reveal">
-      <li class="card">
+      <li class="card" id="robot">
         <img class="card__img" src="assets/img/robots.jpg" alt="Simulación del robot móvil en ROS2" width="800" height="450" loading="lazy">
         <h3>Robot móvil con percepción y voz</h3>
         <p>Brazo manipulador que ve con YOLO, escucha con Whisper y decide con un LLM local para navegar solo en ROS2.</p>

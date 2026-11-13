@@ -385,15 +385,17 @@ ul { margin: 0; padding: 0; }
 /* Inclinación 3D en las imágenes de trabajo */
 .work__media { transform-style: preserve-3d; transition: transform .5s var(--ease); }
 
-/* En números */
-.facts { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter) clamp(3rem, 8vh, 5rem); }
-.facts__list { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-.facts__list li { border-top: 2px solid var(--ink); padding-top: 1rem; }
-.facts__num {
-  display: block; font-family: var(--display); font-weight: 800; letter-spacing: -.03em;
-  font-size: clamp(2.2rem, 4.5vw, 3.4rem); line-height: 1; margin-bottom: .5rem; font-variant-numeric: tabular-nums;
+/* Lo que aporto */
+.strengths { max-width: var(--wrap); margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) var(--gutter); }
+.strengths__list { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.strengths__icon {
+  width: 44px; height: 44px; padding: 10px; border-radius: 12px; margin-bottom: 1rem;
+  background: #e3e7ff; fill: none; stroke: var(--signal); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .4s var(--ease), background .3s;
 }
-.facts__label { color: var(--graphite); font-size: .95rem; display: block; max-width: 22ch; }
+.strengths li:hover .strengths__icon { transform: translateY(-3px) rotate(-4deg); background: #d6dcff; }
+.strengths h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: .45rem; line-height: 1.25; }
+.strengths p { color: var(--graphite); font-size: .95rem; margin: 0; }
 
 /* Galería con zoom */
 .stills img { cursor: zoom-in; }
@@ -431,7 +433,7 @@ ul { margin: 0; padding: 0; }
   .nav__links.is-open { display: flex; }
   .nav__links a { display: block; padding: .7rem 0; font-size: 1.05rem; }
   .nav__links a::after { display: none; }
-  .facts__list { grid-template-columns: repeat(2, 1fr); }
+  .strengths__list { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* Contacto centrado con iconos */
@@ -448,3 +450,5 @@ ul { margin: 0; padding: 0; }
 .icon { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .icon--fill { fill: currentColor; stroke: none; }
 .btn .icon { width: 16px; height: 16px; }
+
+@media (max-width: 480px) { .strengths__list { grid-template-columns: 1fr; } }
