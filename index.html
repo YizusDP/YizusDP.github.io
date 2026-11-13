@@ -37,70 +37,32 @@
 
   <!-- INICIO -->
   <section class="hero" id="inicio">
-
-    <div class="editor" id="editor">
-      <div class="editor__bar">
-        <div class="editor__tabs" role="presentation">
-          <span class="editor__tab is-active">Scene</span>
-          <span class="editor__tab">Game</span>
-        </div>
-        <div class="editor__controls">
-          <button class="editor__play" type="button" aria-pressed="false" aria-label="Modo Play: anima la escena">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
-          </button>
-        </div>
-        <span class="editor__title">Portafolio.unity</span>
-      </div>
-
-      <div class="editor__body">
-        <aside class="editor__panel editor__hierarchy" aria-label="Jerarquía de la escena">
-          <p class="editor__panel-title">Hierarchy</p>
-          <ul class="tree">
-            <li class="tree__root">Portafolio</li>
-            <li><button type="button" data-select="camara">Main Camera</button></li>
-            <li><button type="button" data-select="luz">Directional Light</button></li>
-            <li><button type="button" data-select="jesus" class="is-selected">Jesús Domínguez</button></li>
-            <li><button type="button" data-select="kiosco">Kiosco táctil</button></li>
-            <li><button type="button" data-select="tablero">Tablero de botones</button></li>
-          </ul>
-          <p class="editor__panel-title">Secciones</p>
-          <ul class="tree">
-            <li><a href="#trabajo">Trabajo</a></li>
-            <li><a href="#vfx">VFX</a></li>
-            <li><a href="#academico">Académico</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-          </ul>
-        </aside>
-
-        <div class="editor__scene">
-          <canvas id="scene" aria-label="Escena 3D interactiva con un kiosco táctil y un tablero de botones. Arrastra para orbitar y haz clic en los objetos."></canvas>
-          <img class="editor__fallback" src="assets/img/hero-scene.jpg" alt="" hidden>
-          <p class="editor__help">Arrastra para orbitar · Clic en la pantalla del kiosco o en los botones</p>
-        </div>
-
-        <aside class="editor__panel editor__inspector" aria-label="Inspector" aria-live="polite">
-          <p class="editor__panel-title">Inspector</p>
-          <div id="inspector"></div>
-        </aside>
-      </div>
-
-      <div class="editor__status">
-        <span id="console-line">Escena cargada. Selecciona un objeto.</span>
-        <span id="fps">– fps</span>
-      </div>
-    </div>
-
-    <div class="hero__intro">
-      <div>
+    <canvas class="hero__canvas" id="lab" aria-hidden="true"></canvas>
+    <div class="hero__inner">
+      <div class="hero__text">
         <p class="hero__kicker">Ingeniero en Computación, Facultad de Ingeniería UNAM</p>
         <h1 class="hero__name" data-split aria-label="Jesús Alejandro Domínguez">Jesús Alejandro<br>Domínguez</h1>
-      </div>
-      <div class="hero__side">
         <p class="hero__lead">Hago experiencias que la gente toca: kioscos táctiles, instalaciones con microcontroladores y gráficos en tiempo real.</p>
         <div class="hero__actions">
-          <a class="btn" href="#trabajo">Ver mi trabajo</a>
-          <a class="btn btn--ghost" href="cv/CV_Jesus_Dominguez_Palacios.pdf" target="_blank" rel="noopener">Descargar CV</a>
+          <a class="btn btn--light" href="#trabajo">Ver mi trabajo</a>
+          <a class="btn btn--outline-light" href="cv/CV_Jesus_Dominguez_Palacios.pdf" target="_blank" rel="noopener">Descargar CV</a>
         </div>
+      </div>
+
+      <div class="lab" aria-label="Shaders en vivo">
+        <div class="lab__tabs" role="tablist" aria-label="Elegir shader">
+          <button role="tab" type="button" aria-selected="true" data-shader="aura">Aura de energía</button>
+          <button role="tab" type="button" aria-selected="false" data-shader="fuego">Fuego toon</button>
+          <button role="tab" type="button" aria-selected="false" data-shader="disolver">Disolver</button>
+          <button role="tab" type="button" aria-selected="false" data-shader="holo">Holograma</button>
+        </div>
+        <p class="lab__note" id="lab-note">Fresnel y ruido que sube, en tres bandas toon. Haz clic para transformar.</p>
+        <label class="lab__slider" id="lab-slider">
+          <span>Ki</span>
+          <input type="range" min="0" max="1" step="0.01" value="0" id="lab-mix" aria-label="Mezcla de color del aura">
+          <span>Dorado</span>
+        </label>
+        <p class="lab__credit">Shaders de mi corto en Unity, portados de HLSL a GLSL. Corren en vivo en tu navegador.</p>
       </div>
     </div>
   </section>
@@ -312,6 +274,6 @@
 </footer>
 
 <script src="assets/main.js" defer></script>
-<script type="module" src="assets/hero3d.js"></script>
+<script src="assets/shaderlab.js" defer></script>
 </body>
 </html>
