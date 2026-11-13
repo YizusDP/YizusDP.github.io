@@ -385,17 +385,25 @@ ul { margin: 0; padding: 0; }
 /* Inclinación 3D en las imágenes de trabajo */
 .work__media { transform-style: preserve-3d; transition: transform .5s var(--ease); }
 
-/* Lo que aporto */
-.strengths { max-width: var(--wrap); margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) var(--gutter); }
-.strengths__list { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-.strengths__icon {
-  width: 44px; height: 44px; padding: 10px; border-radius: 12px; margin-bottom: 1rem;
-  background: #e3e7ff; fill: none; stroke: var(--signal); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
-  transition: transform .4s var(--ease), background .3s;
+/* Lo que hago: áreas que llevan a cada proyecto */
+.areas { max-width: var(--wrap); margin: 0 auto; padding: clamp(2.5rem, 7vh, 4.5rem) var(--gutter); }
+.areas__list { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.area {
+  display: grid; grid-template-columns: 44px 1fr; column-gap: 1rem; row-gap: .15rem; align-items: start;
+  padding: 1.25rem; border-radius: var(--radius); text-decoration: none;
+  background: #fff; border: 1px solid var(--line);
+  transition: border-color .25s, transform .3s var(--ease), box-shadow .3s;
 }
-.strengths li:hover .strengths__icon { transform: translateY(-3px) rotate(-4deg); background: #d6dcff; }
-.strengths h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: .45rem; line-height: 1.25; }
-.strengths p { color: var(--graphite); font-size: .95rem; margin: 0; }
+.area:hover { border-color: var(--signal); transform: translateY(-3px); box-shadow: 0 14px 30px -18px rgba(47, 76, 245, .45); }
+.area__icon {
+  grid-row: span 3; width: 44px; height: 44px; padding: 10px; border-radius: 12px;
+  background: #e3e7ff; fill: none; stroke: var(--signal); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+  transition: background .3s, stroke .3s;
+}
+.area:hover .area__icon { background: var(--signal); stroke: #fff; }
+.area__title { font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; color: var(--ink); }
+.area__desc { color: #2b2f3a; font-size: .92rem; }
+.area__stack { color: var(--graphite); font-size: .8rem; margin-top: .2rem; }
 
 /* Galería con zoom */
 .stills img { cursor: zoom-in; }
@@ -433,7 +441,7 @@ ul { margin: 0; padding: 0; }
   .nav__links.is-open { display: flex; }
   .nav__links a { display: block; padding: .7rem 0; font-size: 1.05rem; }
   .nav__links a::after { display: none; }
-  .strengths__list { grid-template-columns: repeat(2, 1fr); }
+  .areas__list { grid-template-columns: 1fr 1fr; }
 }
 
 /* Contacto centrado con iconos */
@@ -451,4 +459,4 @@ ul { margin: 0; padding: 0; }
 .icon--fill { fill: currentColor; stroke: none; }
 .btn .icon { width: 16px; height: 16px; }
 
-@media (max-width: 480px) { .strengths__list { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .areas__list { grid-template-columns: 1fr; } }

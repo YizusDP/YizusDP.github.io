@@ -51,13 +51,13 @@
 
       <div class="lab" aria-label="Shaders en vivo">
         <div class="lab__tabs" role="tablist" aria-label="Elegir shader">
-          <button role="tab" type="button" aria-selected="true" data-shader="aura">Aura de energía</button>
+          <button role="tab" type="button" aria-selected="true" data-shader="disolver">Disolver</button>
+          <button role="tab" type="button" aria-selected="false" data-shader="aura">Aura de energía</button>
           <button role="tab" type="button" aria-selected="false" data-shader="fuego">Fuego toon</button>
-          <button role="tab" type="button" aria-selected="false" data-shader="disolver">Disolver</button>
           <button role="tab" type="button" aria-selected="false" data-shader="holo">Holograma</button>
         </div>
-        <p class="lab__note" id="lab-note">Fresnel y ruido que sube, en tres bandas toon. Haz clic para transformar.</p>
-        <label class="lab__slider" id="lab-slider">
+        <p class="lab__note" id="lab-note">La figura se corta con ruido 3D y deja un borde brillante. Clic para cambiar el color del borde.</p>
+        <label class="lab__slider" id="lab-slider" hidden>
           <span>Ki</span>
           <input type="range" min="0" max="1" step="0.01" value="0" id="lab-mix" aria-label="Mezcla de color del aura">
           <span>Dorado</span>

@@ -1,5 +1,5 @@
 /* Portafolio — interacciones
-   (La escena 3D del inicio vive en hero3d.js)
+   (Los shaders del inicio viven en shaderlab.js)
    2. Mini juego de reflejos con 18 botones
    3. Video del corto bajo demanda
    4. Navegación y revelado al hacer scroll */
@@ -262,7 +262,7 @@ document.querySelectorAll("[data-copy]").forEach((btn) => {
   });
 });
 
-/* ---------- 12. Código Konami: modo fiesta en la escena 3D ---------- */
+/* ---------- 12. Código Konami: modo fiesta ---------- */
 (function konami() {
   const code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
   let pos = 0;
