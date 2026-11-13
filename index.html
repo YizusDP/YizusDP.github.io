@@ -17,11 +17,13 @@
 <body>
 
 <a class="skip" href="#trabajo">Saltar al contenido</a>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="nav">
   <a class="nav__brand" href="#inicio">Jesús Domínguez</a>
   <nav aria-label="Secciones">
-    <ul class="nav__links">
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+    <ul class="nav__links" id="menu">
       <li><a href="#trabajo">Trabajo</a></li>
       <li><a href="#vfx">VFX</a></li>
       <li><a href="#academico">Académico</a></li>
@@ -35,18 +37,71 @@
 
   <!-- INICIO -->
   <section class="hero" id="inicio">
-    <div class="hero__text">
-      <p class="hero__kicker">Ingeniero en Computación, Facultad de Ingeniería UNAM</p>
-      <h1 class="hero__name">Jesús Alejandro<br>Domínguez</h1>
-      <p class="hero__lead">Hago experiencias que la gente toca: kioscos táctiles, instalaciones con microcontroladores y gráficos en tiempo real.</p>
-      <div class="hero__actions">
-        <a class="btn" href="#trabajo">Ver mi trabajo</a>
-        <a class="btn btn--ghost" href="cv/CV_Jesus_Dominguez_Palacios.pdf" target="_blank" rel="noopener">Descargar CV</a>
+
+    <div class="editor" id="editor">
+      <div class="editor__bar">
+        <div class="editor__tabs" role="presentation">
+          <span class="editor__tab is-active">Scene</span>
+          <span class="editor__tab">Game</span>
+        </div>
+        <div class="editor__controls">
+          <button class="editor__play" type="button" aria-pressed="false" aria-label="Modo Play: anima la escena">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
+          </button>
+        </div>
+        <span class="editor__title">Portafolio.unity</span>
+      </div>
+
+      <div class="editor__body">
+        <aside class="editor__panel editor__hierarchy" aria-label="Jerarquía de la escena">
+          <p class="editor__panel-title">Hierarchy</p>
+          <ul class="tree">
+            <li class="tree__root">Portafolio</li>
+            <li><button type="button" data-select="camara">Main Camera</button></li>
+            <li><button type="button" data-select="luz">Directional Light</button></li>
+            <li><button type="button" data-select="jesus" class="is-selected">Jesús Domínguez</button></li>
+            <li><button type="button" data-select="kiosco">Kiosco táctil</button></li>
+            <li><button type="button" data-select="tablero">Tablero de botones</button></li>
+          </ul>
+          <p class="editor__panel-title">Secciones</p>
+          <ul class="tree">
+            <li><a href="#trabajo">Trabajo</a></li>
+            <li><a href="#vfx">VFX</a></li>
+            <li><a href="#academico">Académico</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </aside>
+
+        <div class="editor__scene">
+          <canvas id="scene" aria-label="Escena 3D interactiva con un kiosco táctil y un tablero de botones. Arrastra para orbitar y haz clic en los objetos."></canvas>
+          <img class="editor__fallback" src="assets/img/hero-scene.jpg" alt="" hidden>
+          <p class="editor__help">Arrastra para orbitar · Clic en la pantalla del kiosco o en los botones</p>
+        </div>
+
+        <aside class="editor__panel editor__inspector" aria-label="Inspector" aria-live="polite">
+          <p class="editor__panel-title">Inspector</p>
+          <div id="inspector"></div>
+        </aside>
+      </div>
+
+      <div class="editor__status">
+        <span id="console-line">Escena cargada. Selecciona un objeto.</span>
+        <span id="fps">– fps</span>
       </div>
     </div>
-    <div class="hero__matrix" aria-hidden="true">
-      <canvas id="leds"></canvas>
-      <p class="hero__hint">Pasa el cursor o haz clic</p>
+
+    <div class="hero__intro">
+      <div>
+        <p class="hero__kicker">Ingeniero en Computación, Facultad de Ingeniería UNAM</p>
+        <h1 class="hero__name" data-split aria-label="Jesús Alejandro Domínguez">Jesús Alejandro<br>Domínguez</h1>
+      </div>
+      <div class="hero__side">
+        <p class="hero__lead">Hago experiencias que la gente toca: kioscos táctiles, instalaciones con microcontroladores y gráficos en tiempo real.</p>
+        <div class="hero__actions">
+          <a class="btn" href="#trabajo">Ver mi trabajo</a>
+          <a class="btn btn--ghost" href="cv/CV_Jesus_Dominguez_Palacios.pdf" target="_blank" rel="noopener">Descargar CV</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -58,6 +113,16 @@
       <p>Soy pasante de Ingeniería en Computación en la Facultad de Ingeniería de la UNAM, con el 100% de créditos y la titulación en curso.</p>
       <p>Con Algo Studio desarrollé kioscos táctiles para un evento y di mantenimiento técnico a instalaciones en tienda. También desarrollo videojuegos, shaders y VFX en Unity, apps en Flutter y robótica con ROS2.</p>
     </div>
+  </section>
+
+  <!-- EN NUMEROS -->
+  <section class="facts" aria-label="En números">
+    <ul class="facts__list">
+      <li><span class="facts__num" data-count="2">2</span><span class="facts__label">kioscos táctiles para un evento en el WTC</span></li>
+      <li><span class="facts__num" data-count="3">3</span><span class="facts__label">instalaciones con mantenimiento técnico en Liverpool</span></li>
+      <li><span class="facts__num" data-count="30" data-suffix="+">30+</span><span class="facts__label">herramientas de editor en C# en el corto Amistad</span></li>
+      <li><span class="facts__num" data-count="100" data-suffix="%">100%</span><span class="facts__label">de créditos de Ingeniería en Computación</span></li>
+    </ul>
   </section>
 
   <!-- TRABAJO -->
@@ -223,7 +288,10 @@
   <section class="contact" id="contacto" aria-labelledby="contacto-title">
     <h2 class="contact__title" id="contacto-title">¿Trabajamos juntos?</h2>
     <p>Busco un puesto como ingeniero en computación en desarrollo de software, experiencias interactivas o videojuegos.</p>
-    <a class="contact__mail" href="mailto:adp3993@gmail.com">adp3993@gmail.com</a>
+    <div class="contact__row">
+      <a class="contact__mail" href="mailto:adp3993@gmail.com">adp3993@gmail.com</a>
+      <button class="btn btn--ghost btn--small" type="button" data-copy="adp3993@gmail.com">Copiar correo</button>
+    </div>
     <ul class="contact__links">
       <li><a href="https://www.linkedin.com/in/dom%C3%ADnguez-palacios-jes%C3%BAs-alejandro-b61452292" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href="https://github.com/YizusDP" target="_blank" rel="noopener">GitHub</a></li>
@@ -233,10 +301,17 @@
 
 </main>
 
+<dialog class="lightbox" aria-label="Imagen ampliada">
+  <img src="" alt="">
+  <button class="lightbox__close" type="button" aria-label="Cerrar">×</button>
+</dialog>
+<div class="toast" role="status" aria-live="polite"></div>
+
 <footer class="footer">
-  <p>© 2026 Jesús Alejandro Domínguez Palacios · Ciudad de México</p>
+  <p>© 2026 Jesús Alejandro Domínguez Palacios, Ciudad de México. Hecho a mano con HTML, CSS y JavaScript, sin frameworks.</p>
 </footer>
 
 <script src="assets/main.js" defer></script>
+<script type="module" src="assets/hero3d.js"></script>
 </body>
 </html>

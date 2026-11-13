@@ -1,153 +1,10 @@
 /* Portafolio — interacciones
-   1. Matriz de LEDs del hero: onda de entrada, letrero que corre,
-      luz bajo el cursor y ondas al hacer clic
+   (La escena 3D del inicio vive en hero3d.js)
    2. Mini juego de reflejos con 18 botones
    3. Video del corto bajo demanda
    4. Navegación y revelado al hacer scroll */
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---------- 1. Matriz de LEDs: letrero que se puede tocar ---------- */
-(function ledMatrix() {
-  const canvas = document.getElementById("leds");
-  if (!canvas) return;
-  const box = canvas.parentElement;
-  const ctx = canvas.getContext("2d");
-  const OFF = [44, 49, 64], SIGNAL = [92, 118, 255], LED = [255, 179, 71], RIPPLE = [190, 205, 255];
-
-  // fuente de 3×5 para el letrero
-  const FONT = {
-    H: ["101", "101", "111", "101", "101"], O: ["111", "101", "101", "101", "111"],
-    L: ["100", "100", "100", "100", "111"], A: ["010", "101", "111", "101", "101"],
-    S: ["111", "100", "111", "001", "111"], Y: ["101", "101", "010", "010", "010"],
-    J: ["001", "001", "001", "101", "111"], E: ["111", "100", "110", "100", "111"],
-    U: ["101", "101", "101", "101", "111"], " ": ["0", "0", "0", "0", "0"],
-  };
-  const MESSAGE = "HOLA  SOY JESUS    ";
-  // convierte el mensaje en columnas de bits
-  const textCols = [];
-  for (const ch of MESSAGE) {
-    const g = FONT[ch];
-    for (let c = 0; c < g[0].length; c++) textCols.push(g.map((row) => row[c] === "1"));
-    textCols.push([false, false, false, false, false]);
-  }
-
-  let cols, rows, gap, leds = [], pointer = null, ripples = [], running = true;
-  const start = performance.now();
-
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const { width, height } = box.getBoundingClientRect();
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    gap = Math.max(22, Math.min(34, width / 13));
-    cols = Math.floor(width / gap);
-    rows = Math.floor(height / gap);
-    const offX = (width - (cols - 1) * gap) / 2;
-    const offY = (height - (rows - 1) * gap) / 2;
-    leds = [];
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        leds.push({ col: x, row: y, x: offX + x * gap, y: offY + y * gap, heat: 0 });
-      }
-    }
-  }
-
-  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * Math.min(1, t)));
-
-  function textAt(col, row, t) {
-    const top = Math.floor((rows - 5) / 2);
-    const r = row - top;
-    if (r < 0 || r > 4) return false;
-    const shift = Math.floor(t * 7); // columnas por segundo
-    const i = (col + shift) % textCols.length;
-    return textCols[i][r];
-  }
-
-  function frame(now) {
-    if (!running) return;
-    const { width, height } = canvas.getBoundingClientRect();
-    ctx.clearRect(0, 0, width, height);
-    const t = (now - start) / 1000;
-    const r = gap * 0.17;
-    ripples = ripples.filter((rp) => now - rp.t0 < 1600);
-
-    for (const led of leds) {
-      // 1) onda diagonal de entrada
-      const d = (led.x + led.y) / (width + height);
-      const wave = Math.max(0, 1 - Math.abs(t * 0.75 - d) * 7);
-
-      // 2) letrero que corre después de la onda
-      const textOn = t > 1.6 && textAt(led.col, led.row, t - 1.6) ? Math.min(1, (t - 1.6) * 2) * 0.85 : 0;
-
-      // 3) luz ámbar bajo el cursor, con estela
-      if (pointer) {
-        const dist = Math.hypot(led.x - pointer.x, led.y - pointer.y);
-        led.heat = Math.max(led.heat, Math.max(0, 1 - dist / (gap * 2.6)));
-      }
-      led.heat *= 0.955;
-
-      // 4) ondas expansivas al hacer clic
-      let ring = 0;
-      for (const rp of ripples) {
-        const age = (now - rp.t0) / 1000;
-        const radius = age * gap * 11;
-        const dist = Math.hypot(led.x - rp.x, led.y - rp.y);
-        ring = Math.max(ring, Math.max(0, 1 - Math.abs(dist - radius) / (gap * 0.9)) * (1 - age / 1.6));
-      }
-
-      let color = mix(OFF, SIGNAL, Math.max(wave, textOn));
-      color = mix(color, RIPPLE, ring);
-      color = mix(color, LED, led.heat);
-      const glow = Math.max(wave, textOn * 0.7, led.heat, ring);
-
-      ctx.beginPath();
-      ctx.arc(led.x, led.y, r * (1 + glow * 0.35), 0, Math.PI * 2);
-      ctx.fillStyle = `rgb(${color})`;
-      ctx.shadowBlur = glow > 0.05 ? 14 * glow : 0;
-      ctx.shadowColor = `rgba(${color},.9)`;
-      ctx.fill();
-    }
-    requestAnimationFrame(frame);
-  }
-
-  function drawStatic() {
-    const { width, height } = canvas.getBoundingClientRect();
-    ctx.clearRect(0, 0, width, height);
-    for (const led of leds) {
-      ctx.beginPath();
-      ctx.arc(led.x, led.y, gap * 0.17, 0, Math.PI * 2);
-      ctx.fillStyle = textAt(led.col, led.row, 0) ? "rgb(92,118,255)" : "rgb(44,49,64)";
-      ctx.fill();
-    }
-  }
-
-  const local = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  };
-
-  resize();
-  window.addEventListener("resize", () => { resize(); if (reduceMotion) drawStatic(); });
-  if (reduceMotion) { drawStatic(); return; }
-
-  canvas.addEventListener("pointermove", (e) => { pointer = local(e); box.classList.add("is-touched"); });
-  canvas.addEventListener("pointerdown", (e) => {
-    pointer = local(e);
-    ripples.push({ ...pointer, t0: performance.now() });
-    box.classList.add("is-touched");
-  });
-  canvas.addEventListener("pointerleave", () => { pointer = null; });
-
-  new IntersectionObserver(([entry]) => {
-    const visible = entry.isIntersecting;
-    if (visible && !running) { running = true; requestAnimationFrame(frame); }
-    running = visible;
-  }).observe(canvas);
-
-  requestAnimationFrame(frame);
-})();
 
 /* ---------- 2. Mini juego de reflejos (18 botones) ---------- */
 (function reflexGame() {
@@ -264,3 +121,157 @@ if ("IntersectionObserver" in window && !reduceMotion) {
 } else {
   reveals.forEach((el) => el.classList.add("is-visible"));
 }
+
+/* ---------- 5. Barra de progreso y enlace activo ---------- */
+(function readingProgress() {
+  const bar = document.querySelector(".progress");
+  const links = [...document.querySelectorAll(".nav__links a")];
+  const sections = links.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+
+  let ticking = false;
+  function update() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+    const mid = window.scrollY + window.innerHeight * 0.35;
+    let active = null;
+    sections.forEach((sec) => { if (sec.offsetTop <= mid) active = sec; });
+    links.forEach((a) => a.classList.toggle("is-active", active && a.getAttribute("href") === "#" + active.id));
+    ticking = false;
+  }
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
+
+/* ---------- 6. Menú en celular ---------- */
+(function mobileMenu() {
+  const toggle = document.querySelector(".nav__toggle");
+  const menu = document.getElementById("menu");
+  if (!toggle || !menu) return;
+  const set = (open) => {
+    menu.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "Cerrar" : "Menú";
+  };
+  toggle.addEventListener("click", () => set(!menu.classList.contains("is-open")));
+  menu.addEventListener("click", (e) => { if (e.target.closest("a")) set(false); });
+})();
+
+/* ---------- 7. Nombre letra por letra ---------- */
+(function splitName() {
+  const h1 = document.querySelector("[data-split]");
+  if (!h1) return;
+  if (!h1.hasAttribute("aria-label")) h1.setAttribute("aria-label", h1.textContent.trim());
+  let i = 0;
+  [...h1.childNodes].forEach((node) => {
+    if (node.nodeType !== Node.TEXT_NODE) return;
+    const frag = document.createDocumentFragment();
+    node.textContent.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { frag.append(" "); return; }
+      const word = document.createElement("span");
+      word.className = "word";
+      word.setAttribute("aria-hidden", "true");
+      for (const ch of part) {
+        const span = document.createElement("span");
+        span.className = "char";
+        span.style.setProperty("--i", i++);
+        span.textContent = ch;
+        word.append(span);
+      }
+      frag.append(word);
+    });
+    node.replaceWith(frag);
+  });
+})();
+
+/* ---------- 8. Botones magnéticos e inclinación 3D ---------- */
+if (!reduceMotion && window.matchMedia("(hover: hover)").matches) {
+  document.querySelectorAll(".btn").forEach((btn) => {
+    btn.addEventListener("pointermove", (e) => {
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * 0.25;
+      const y = (e.clientY - r.top - r.height / 2) * 0.35;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
+  });
+
+  document.querySelectorAll(".work__media:not(.work__media--panel)").forEach((media) => {
+    media.addEventListener("pointermove", (e) => {
+      const r = media.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      media.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg)`;
+    });
+    media.addEventListener("pointerleave", () => { media.style.transform = ""; });
+  });
+}
+
+/* ---------- 9. Números que cuentan ---------- */
+(function countUp() {
+  const nums = document.querySelectorAll("[data-count]");
+  if (reduceMotion || !("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target, target = +el.dataset.count, suffix = el.dataset.suffix || "";
+      const t0 = performance.now(), dur = 1100;
+      (function tick(now) {
+        const p = Math.min(1, (now - t0) / dur);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  nums.forEach((n) => { n.textContent = "0" + (n.dataset.suffix || ""); io.observe(n); });
+})();
+
+/* ---------- 10. Galería con zoom ---------- */
+(function lightbox() {
+  const dialog = document.querySelector(".lightbox");
+  if (!dialog || typeof dialog.showModal !== "function") return;
+  const big = dialog.querySelector("img");
+  document.querySelectorAll(".stills img").forEach((img) => {
+    img.tabIndex = 0;
+    img.setAttribute("role", "button");
+    const open = () => { big.src = img.src; big.alt = img.alt; dialog.showModal(); };
+    img.addEventListener("click", open);
+    img.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  });
+  dialog.querySelector(".lightbox__close").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
+})();
+
+/* ---------- 11. Copiar correo ---------- */
+const toast = document.querySelector(".toast");
+function showToast(text) {
+  toast.textContent = text;
+  toast.classList.add("is-visible");
+  clearTimeout(showToast.t);
+  showToast.t = setTimeout(() => toast.classList.remove("is-visible"), 2200);
+}
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy);
+      showToast("Correo copiado");
+    } catch {
+      showToast(btn.dataset.copy);
+    }
+  });
+});
+
+/* ---------- 12. Código Konami: modo fiesta en la escena 3D ---------- */
+(function konami() {
+  const code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  let pos = 0;
+  window.addEventListener("keydown", (e) => {
+    pos = e.key === code[pos] ? pos + 1 : (e.key === code[0] ? 1 : 0);
+    if (pos === code.length) {
+      pos = 0;
+      document.documentElement.classList.toggle("party");
+      showToast(document.documentElement.classList.contains("party") ? "Modo fiesta activado" : "Modo fiesta desactivado");
+    }
+  });
+})();
