@@ -275,3 +275,87 @@ document.querySelectorAll("[data-copy]").forEach((btn) => {
     }
   });
 })();
+
+/* ---------- 13. Carrusel académico que rota solo ---------- */
+(function carousel() {
+  const root = document.querySelector(".carousel");
+  if (!root) return;
+  const track = root.querySelector(".carousel__track");
+  const cards = [...track.children];
+  const dotsWrap = root.querySelector(".carousel__dots");
+  const progress = root.querySelector(".carousel__progress");
+  const pauseBtn = root.querySelector(".carousel__pause");
+  const DUR = 3600;
+  let index = 0, timer = null, hovering = false, userPaused = reduceMotion, visible = false, scrollTimer = null;
+  root.style.setProperty("--dur", DUR + "ms");
+
+  const dots = cards.map((card, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-label", card.querySelector("h3").textContent);
+    b.addEventListener("click", () => { go(i); restart(); });
+    dotsWrap.append(b);
+    return b;
+  });
+
+  function mark(i) {
+    index = i;
+    cards.forEach((c, k) => c.classList.toggle("is-active", k === i));
+    dots.forEach((d, k) => d.setAttribute("aria-selected", String(k === i)));
+  }
+
+  function go(i) {
+    const n = (i + cards.length) % cards.length;
+    const max = track.scrollWidth - track.clientWidth;
+    const left = Math.min(cards[n].offsetLeft - cards[0].offsetLeft, max);
+    track.scrollTo({ left, behavior: reduceMotion ? "auto" : "smooth" });
+    mark(n);
+  }
+
+  const playing = () => !userPaused && !hovering && visible;
+  function restart() {
+    clearTimeout(timer);
+    progress.classList.remove("is-running");
+    void progress.offsetWidth; // reinicia la animación de la barra
+    root.classList.toggle("is-paused", !playing());
+    if (!playing()) return;
+    progress.classList.add("is-running");
+    timer = setTimeout(() => { go(index + 1); restart(); }, DUR);
+  }
+
+  root.querySelectorAll("[data-dir]").forEach((b) => b.addEventListener("click", () => { go(index + +b.dataset.dir); restart(); }));
+  pauseBtn.addEventListener("click", () => {
+    userPaused = !userPaused;
+    pauseBtn.textContent = userPaused ? "Reproducir" : "Pausar";
+    pauseBtn.setAttribute("aria-pressed", String(userPaused));
+    restart();
+  });
+  if (reduceMotion) { pauseBtn.textContent = "Reproducir"; pauseBtn.setAttribute("aria-pressed", "true"); }
+
+  // pausa al pasar el cursor o al enfocar con teclado
+  root.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovering = true; restart(); } });
+  root.addEventListener("pointerleave", () => { hovering = false; restart(); });
+  root.addEventListener("focusin", () => { hovering = true; restart(); });
+  root.addEventListener("focusout", () => { hovering = false; restart(); });
+  track.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
+  });
+
+  // si la persona desliza con el dedo, la tarjeta más cercana queda activa
+  track.addEventListener("scroll", () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const x = track.scrollLeft + cards[0].offsetLeft;
+      let best = 0, dist = Infinity;
+      cards.forEach((c, k) => { const d = Math.abs(c.offsetLeft - x); if (d < dist) { dist = d; best = k; } });
+      if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 4 && best < index) return;
+      if (best !== index && Math.abs(cards[index].offsetLeft - x) > 20) { mark(best); restart(); }
+    }, 140);
+  }, { passive: true });
+
+  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; restart(); }, { threshold: 0.3 }).observe(root);
+
+  mark(0);
+})();

@@ -219,7 +219,8 @@
     <h2 class="section__title" id="academico-title">Académico</h2>
     <p class="section__intro">Proyectos de la carrera y de SODVI, la sociedad de videojuegos de la FI UNAM.</p>
 
-    <ul class="grid reveal">
+    <div class="carousel reveal" aria-roledescription="carrusel" aria-label="Proyectos académicos">
+      <ul class="carousel__track" tabindex="0">
       <li class="card" id="robot">
         <img class="card__img" src="assets/img/robots.jpg" alt="Simulación del robot móvil en ROS2" width="800" height="450" loading="lazy">
         <h3>Robot móvil con percepción y voz</h3>
@@ -266,7 +267,15 @@
         <p>Circuitos de superposición y entrelazamiento con Qiskit en Jupyter.</p>
         <a class="link" href="https://github.com/YizusDP/LaboratorioCC2026-2" target="_blank" rel="noopener">Repositorio</a>
       </li>
-    </ul>
+      </ul>
+      <div class="carousel__controls">
+        <button class="carousel__btn" type="button" data-dir="-1" aria-label="Proyecto anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="carousel__dots" role="tablist" aria-label="Elegir proyecto"></div>
+        <button class="carousel__btn" type="button" data-dir="1" aria-label="Siguiente proyecto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="carousel__pause" type="button" aria-pressed="false">Pausar</button>
+      </div>
+      <div class="carousel__progress" aria-hidden="true"><span></span></div>
+    </div>
   </section>
 
   <!-- HABILIDADES -->

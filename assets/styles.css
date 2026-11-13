@@ -265,7 +265,6 @@ ul { margin: 0; padding: 0; }
 .stills img:hover { transform: translateY(-4px); }
 
 /* ---------- Académico ---------- */
-.grid { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem 1.75rem; }
 .card { display: flex; flex-direction: column; }
 .card h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: .45rem; line-height: 1.2; }
 .card p { font-size: .95rem; color: var(--graphite); margin-bottom: .75rem; }
@@ -318,7 +317,6 @@ ul { margin: 0; padding: 0; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
   .vfx { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
@@ -334,7 +332,6 @@ ul { margin: 0; padding: 0; }
   .stills img:last-child { display: none; }
 }
 @media (max-width: 480px) {
-  .grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -460,3 +457,58 @@ ul { margin: 0; padding: 0; }
 .btn .icon { width: 16px; height: 16px; }
 
 @media (max-width: 560px) { .areas__list { grid-template-columns: 1fr; } }
+
+/* ---------- Carrusel académico ---------- */
+.carousel { position: relative; }
+.carousel__track {
+  list-style: none; position: relative;
+  display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 1rem .25rem 2rem; margin: 0 -.25rem;
+  scrollbar-width: none; overscroll-behavior-x: contain;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, #000 0, #000 92%, transparent);
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__track:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+.carousel__track .card {
+  flex: 0 0 clamp(250px, 27%, 300px); scroll-snap-align: start;
+  background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: .9rem .9rem 1.1rem;
+  transition: transform .6s var(--ease), box-shadow .6s var(--ease), border-color .4s;
+}
+.carousel__track .card .card__img, .carousel__track .card .card__icon { margin-bottom: .9rem; }
+.carousel__track .card.is-active {
+  transform: translateY(-8px) rotate(-.6deg);
+  border-color: var(--signal);
+  box-shadow: 0 22px 40px -24px rgba(47, 76, 245, .55);
+}
+.carousel__track .card.is-active .card__img { transform: scale(1.04); }
+.carousel__track .card.is-active .card__icon { stroke: var(--signal); background: #e3e7ff; }
+
+.carousel__controls { display: flex; align-items: center; gap: .75rem; margin-top: .25rem; }
+.carousel__btn {
+  width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--line); background: #fff; cursor: pointer;
+  display: grid; place-items: center; transition: border-color .2s, transform .25s var(--ease), background .2s;
+}
+.carousel__btn svg { width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.carousel__btn:hover { border-color: var(--signal); transform: scale(1.08); }
+.carousel__btn:active { transform: scale(.94); }
+.carousel__dots { display: flex; gap: .4rem; flex: 1; justify-content: center; }
+.carousel__dots button {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: #c9cdd8; cursor: pointer;
+  transition: width .4s var(--ease), background .3s;
+}
+.carousel__dots button[aria-selected="true"] { width: 28px; background: var(--signal); }
+.carousel__pause {
+  font: 600 .85rem var(--body); color: var(--graphite); background: none; border: 0; cursor: pointer; padding: .4rem .2rem;
+}
+.carousel__pause:hover { color: var(--ink); }
+.carousel__progress { height: 3px; background: var(--line); border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+.carousel__progress span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--signal), var(--led)); transform-origin: 0 50%; transform: scaleX(0); }
+.carousel__progress.is-running span { animation: carouselProgress var(--dur, 3600ms) linear forwards; }
+.carousel.is-paused .carousel__progress span { animation-play-state: paused; }
+@keyframes carouselProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (max-width: 760px) {
+  .carousel__track .card { flex-basis: 78%; }
+  .carousel__pause { display: none; }
+}
