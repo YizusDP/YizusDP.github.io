@@ -433,3 +433,18 @@ ul { margin: 0; padding: 0; }
   .nav__links a::after { display: none; }
   .facts__list { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Contacto centrado con iconos */
+.contact { text-align: center; }
+.contact p { margin-left: auto; margin-right: auto; }
+.contact__row { justify-content: center; }
+.contact__links { justify-content: center; gap: 1rem; }
+.contact__links a {
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .6rem 1.1rem; border: 1.5px solid var(--line); border-radius: 999px; background: #fff;
+  transition: color .2s, border-color .2s, transform .25s var(--ease);
+}
+.contact__links a:hover { color: var(--signal); border-color: var(--signal); transform: translateY(-2px); }
+.icon { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon--fill { fill: currentColor; stroke: none; }
+.btn .icon { width: 16px; height: 16px; }
